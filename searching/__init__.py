@@ -1,2 +1,4 @@
+from searching.index import search
+
 def searcher(keywords):
-    return '{result: %s}' % keywords
+    return search(keywords)

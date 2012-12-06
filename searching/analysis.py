@@ -28,29 +28,29 @@ def parse(text, fieldname):
 
 def clean_html(html):
     # First we remove inline JavaScript/CSS:
-    cleaned = re.sub(r"(?is)<(script|style).*?>.*?(</\1>)", "", html.strip())
+    cleaned = re.sub(ur"(?is)<(script|style).*?>.*?(</\1>)", u"", html.strip())
     # Then we remove html comments. This has to be done before removing regular
     # tags since comments can contain '>' characters.
-    cleaned = re.sub(r"(?s)<!--(.*?)-->[\n]?", "", cleaned)
+    cleaned = re.sub(ur"(?s)<!--(.*?)-->[\n]?", u"", cleaned)
     # Next we can remove the remaining tags:
-    cleaned = re.sub(r"(?s)<.*?>", " ", cleaned)
+    cleaned = re.sub(ur"(?s)<.*?>", u" ", cleaned)
     # Finally, we deal with whitespace
-    cleaned = re.sub(r"&nbsp;", " ", cleaned)
-    cleaned = re.sub(r"  ", " ", cleaned)
-    cleaned = re.sub(r"  ", " ", cleaned)
-    return ' '.join(cleaned.split())
+    cleaned = re.sub(ur"&nbsp;", u" ", cleaned)
+    cleaned = re.sub(ur"  ", u" ", cleaned)
+    cleaned = re.sub(ur"  ", u" ", cleaned)
+    return u' '.join(cleaned.split())
 
 
 def extract_text(html):
-    title_search = re.search(r'<title>(.*)</title>', html, re.IGNORECASE)
+    title_search = re.search(ur'<title>(.*)</title>', html, re.IGNORECASE)
     title = title_search.group(1) if title_search else u''
     text = clean_html(html)
     return text, title
 
 
 def tokenize(text, title):
-    tokens_title = parse(title, 'title')
-    tokens_text = parse(text, 'text')
+    tokens_title = parse(title, u'title')
+    tokens_text = parse(text, u'text')
     tokens = tokens_title + tokens_text
     return tokens
 
