@@ -45,8 +45,8 @@ def highlight(text, tokens, trim):
     result = u''
     start = 0
     for s, t in positions:
-        if trim and start and s - start > 20:
-            prefix = text[start:start+10] + u'...' + text[s-10:s]
+        if trim and s - start > 20:
+            prefix = (text[start:start+10] if start else u'') + u'...' + text[s-10:s]
         else:
             prefix = text[start:s]
         result += prefix + u'<span class="match">%s</span>' % text[s:t]
