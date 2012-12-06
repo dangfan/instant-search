@@ -1,1 +1,9 @@
-This file was created by IntelliJ IDEA 11.1.4 for binding GitHub repository
+Requirements
+* Beautiful Soup
+* Flask
+* redis
+* stemming
+
+Configuration
+$ brew install redis
+$ pip install beautifulsoup4 redis flask stemming
