@@ -1,5 +1,6 @@
 from analysis import analyze, parse, stop_and_stem_seq
 import redis
+import json
 
 r = redis.StrictRedis()
 
@@ -36,9 +37,16 @@ def get_set(tokens):
     return r.zrevrange('temp_set', 0, -1)
 
 
-def search(query):
-    from searching.collect import score, collect
+def search(query, page = 1, size=15):
+    from searching.collect import collect, score
     tokens = stop_and_stem_seq(parse(query, ''))
-    result = score(get_set(tokens), tokens)
-    result = collect(result, tokens)
+    # try to get result from redis first
+    key = u'cache:' + query
+    if r.ttl(key) == -1:
+        result = score(get_set(tokens), tokens)
+        r.set(key, json.dumps(result))
+        r.expire(key, 60)
+    else:
+        result = json.loads(r.get(key))
+    result = collect(result[(page - 1)*size:page*size], tokens)
     return result

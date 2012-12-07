@@ -36,7 +36,7 @@ def score(result, query):
         map(lambda q: score_single(doc, q.word, count, avgfl), query),
         0
     )), result)
-    return sorted(pairs, key=lambda x:x[1], reverse=True)
+    return map(lambda t: t[0], sorted(pairs, key=lambda x:x[1], reverse=True))
 
 
 def highlight(text, tokens, trim):
@@ -78,4 +78,4 @@ def generate_json(document, tokens):
 
 
 def collect(result, tokens):
-    return u'[%s]' % u', '.join(generate_json(doc, tokens) for doc, x in result)
+    return u'[%s]' % u', '.join(generate_json(doc, tokens) for doc in result)
