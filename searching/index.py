@@ -1,4 +1,6 @@
 from analysis import analyze, parse, stop_and_stem_seq
+from searching.collect import collect
+import suggestor
 import redis
 import json
 
@@ -11,11 +13,13 @@ def get_doc_id(url):
 
 
 def save_and_segment(doc_id, html, url):
+    import suggestor
     title, text, words = analyze(html)
     l = len(words)
     r.hmset('doc:%s'%doc_id, {'title': title, 'text': text, 'len': l, 'url': url})
     r.incrbyfloat('total_len', l)
     for token in words:
+        suggestor.add_query(token.word, token.weight)
         r.zadd(u'word:%s'%token.word, token.weight, doc_id)
         r.hmset(u'dw:%s:%s:%s'%(doc_id, token.word, token.fieldname), {
             'pos': token.pos,
@@ -37,16 +41,21 @@ def get_set(tokens):
     return r.zrevrange('temp_set', 0, -1)
 
 
-def search(query, page = 1, size=15):
-    from searching.collect import collect, score
-    tokens = stop_and_stem_seq(parse(query, ''))
+def get_doc_list(query, tokens):
     # try to get result from redis first
     key = u'cache:' + query
     if r.ttl(key) == -1:
-        result = score(get_set(tokens), tokens)
+        result = get_set(tokens)
         r.set(key, json.dumps(result))
         r.expire(key, 60)
     else:
         result = json.loads(r.get(key))
-    result = collect(result[(page - 1)*size:page*size], tokens)
+    return result
+
+
+def search(query, page = 1, size=15):
+    suggestor.add_query(query)
+    tokens = stop_and_stem_seq(parse(query, ''))
+    result = get_doc_list(query, tokens)
+    result = collect(result[(page - 1)*size:page*size], tokens, len(result))
     return result
