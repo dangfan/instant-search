@@ -1,6 +1,7 @@
 import json
 from searching.analysis import Token
 import redis
+import time
 
 r = redis.StrictRedis()
 
@@ -43,5 +44,6 @@ def generate_json(document, tokens):
 
 
 def collect(result, tokens, count, lasttime):
-    result = 
-    return u'{"count": %d, "result": [%s]}' % (count, u', '.join(generate_json(doc, tokens) for doc in result))
+    text = u', '.join(generate_json(doc, tokens) for doc in result)
+    timedelta = time.clock() - lasttime
+    return u'{"count": %d, "time": %.3f, "result": [%s]}' % (count, timedelta, text)
