@@ -9,7 +9,7 @@ Requirements
 
 Configuration
 
-* Install Redis (refer to [Redis docs](http://redis.io/);
+* Install Redis (refer to [Redis docs](http://redis.io/));
 * Install related python libs;
 
     `$ pip install beautifulsoup4 redis flask stemming`
