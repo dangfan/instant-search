@@ -24,7 +24,7 @@ $(document).ready(function(){
     }
   });
 
-  $('#search-box').keyup(function(){
+  $('#search-box').on("input", function(){
     var query = $(this).val();
     clearTimeout(inputTimer);
 
@@ -71,7 +71,7 @@ function search(query, callback) {
   //            }
   //         ]
   //   };
-  callback(data);
+  // callback(data);
 }
 
 function suggest(query, callback) {
@@ -80,7 +80,7 @@ function suggest(query, callback) {
     type: "GET",
     dataType: "json",
     success: function(data) {
-
+      callback(data.result);
     },
     error: function(jqXHR, textStatus) {
     }
@@ -94,7 +94,7 @@ function suggest(query, callback) {
   //             "11221",
   //         ]
   // };
-  callback(data.result);
+  // callback(data.result);
 }
 
 function showResults(data) {
