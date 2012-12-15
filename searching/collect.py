@@ -14,7 +14,7 @@ def highlight(text, tokens, trim):
             prefix = (text[start:start+10] if start else u'') + u'...' + text[s-10:s]
         else:
             prefix = text[start:s]
-        result += prefix + u'<span class="match">%s</span>' % text[s:t]
+        result += prefix + u'<span class=\\"match\\">%s</span>' % text[s:t]
         start = t
     suffix = text[start:]
     if trim and len(suffix) > 10:
@@ -42,5 +42,6 @@ def generate_json(document, tokens):
     return u'{"title": "%s", "url": "%s", "text": "%s"}' % (title, url, text)
 
 
-def collect(result, tokens, count):
+def collect(result, tokens, count, lasttime):
+    result = 
     return u'{"count": %d, "result": [%s]}' % (count, u', '.join(generate_json(doc, tokens) for doc in result))

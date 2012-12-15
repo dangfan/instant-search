@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import suggestor
 import searching.index as index
 
@@ -6,16 +6,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    return render_template('home.html')
+    f = open('server/templates/home.html')
+    return f.read()
 
-@app.route('/search/<keywords>')
-@app.route('/search/<keywords>/<page>')
-def search(keywords, page=1):
+@app.route('/search')
+def search():
+    keywords = request.args.get('query', '')
+    page = request.args.get('page', '1')
     page = int(page)
     return index.search(keywords, page)
 
-@app.route('/suggest/<keywords>')
-def suggest(keywords):
+@app.route('/suggest')
+def suggest():
+    keywords = request.args.get('query', '')
     return suggestor.suggest(keywords)
 
 @app.route('/add/')

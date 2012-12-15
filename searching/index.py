@@ -3,6 +3,7 @@ from searching.collect import collect
 import suggestor
 import redis
 import json
+import time
 
 r = redis.StrictRedis()
 
@@ -53,9 +54,10 @@ def get_doc_list(query, tokens):
     return result
 
 
-def search(query, page = 1, size=15):
+def search(query, page = 1, size=10):
+    lasttime = time.clock()
     suggestor.add_query(query)
     tokens = stop_and_stem_seq(parse(query, ''))
     result = get_doc_list(query, tokens)
-    result = collect(result[(page - 1)*size:page*size], tokens, len(result))
+    result = collect(result[(page - 1)*size:page*size], tokens, len(result), lasttime)
     return result
