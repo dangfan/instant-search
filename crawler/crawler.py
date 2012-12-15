@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 SEEDS_FILE = "seeds"    # URLs to begin with
 IGNORE_FILE = "ignore"  # ignore URLs matching reg patterns defined in the file
-LOGS_FILE = "logs"      # log visited URLs and where files were saved
-SAVE_TO = "/Users/Helium/Documents/workspace/crawl-html/"      # where the htmls save to
+LOGS_FILE = "/tmp/instant-search/logs"      # log visited URLs and where files were saved
+SAVE_TO = "/tmp/instant-search/"      # where the htmls save to
 
 class SimpleCrawler(object):
     """ Simple Crawler by Heliumchen """
