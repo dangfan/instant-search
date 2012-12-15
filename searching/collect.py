@@ -15,7 +15,7 @@ def highlight(text, tokens, trim):
             prefix = (text[start:start+10] if start else u'') + u'...' + text[s-10:s]
         else:
             prefix = text[start:s]
-        result += prefix + u'<span class=\\"match\\">%s</span>' % text[s:t]
+        result += prefix + u'<span class="match">%s</span>' % text[s:t]
         start = t
     suffix = text[start:]
     if trim and len(suffix) > 10:
@@ -40,10 +40,17 @@ def generate_json(document, tokens):
     text_tokens = filter(None, map(lambda t: get_original_token(document, t.word, u'text'), tokens))
     title = highlight(title, title_tokens, trim=False)
     text = highlight(text, text_tokens, trim=True)
-    return u'{"title": "%s", "url": "%s", "text": "%s"}' % (title, url, text)
-
+    return {
+        "title": title,
+        "url": url,
+        "text": text
+    }
 
 def collect(result, tokens, count, lasttime):
-    text = u', '.join(generate_json(doc, tokens) for doc in result)
+    text = [generate_json(doc, tokens) for doc in result]
     timedelta = time.clock() - lasttime
-    return u'{"count": %d, "time": %.3f, "result": [%s]}' % (count, timedelta, text)
+    return json.dumps({
+        "count": count,
+        "time": "%.3f"%timedelta,
+        "result": text
+    })

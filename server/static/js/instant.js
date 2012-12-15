@@ -7,8 +7,8 @@ $(document).ready(function(){
   $('form#search').submit(function(){
     toggleWaiting(true);
     var query = $('#search-box').val();
-    search(query, function(data){
-      console.log("data=",data);
+    search(query, 1, function(data){
+      currentPage = 1;
       showResults(data);
       toggleWaiting(false);
     });
@@ -48,10 +48,10 @@ function instantSearch() {
   }, 800); // 800ms to fire the search function
 }
 
-function search(query, callback) {
+function search(query, page, callback) {
   var q = {
     query: query,
-    page: currentPage
+    page: page
   };
 
   $.ajax({
@@ -59,7 +59,6 @@ function search(query, callback) {
     data: q,
     type: "GET",
     success: function(data) {
-      console.log(data);
       if (typeof(data) == 'string')
         data = JSON.parse(data);
       callback(data);
@@ -90,11 +89,21 @@ function suggest(query, callback) {
 
 function searchNext(isNextPage) {
   if (isNextPage && currentPage < maxPage) {
-    currentPage++;
-    $('form#search').submit();
+    currentPage = currentPage + 1;
+      toggleWaiting(true);
+      var query = $('#search-box').val();
+      search(query, currentPage, function(data){
+          showResults(data);
+          toggleWaiting(false);
+      });
   } else if(!isNextPage && currentPage > 1) {
-    currentPage--;
-    $('form#search').submit();
+    currentPage = currentPage - 1;
+      toggleWaiting(true);
+      var query = $('#search-box').val();
+      search(query, currentPage, function(data){
+          showResults(data);
+          toggleWaiting(false);
+      });
   }
 }
 
@@ -123,8 +132,12 @@ function showResults(data) {
       $(this).removeClass('well');
     }
   });
-  $('.next-page').on('click', searchNext(true));
-  $('.next-page').on('click', searchNext(false));
+  $('.next-page').on('click', function(){
+      searchNext(true);
+  });
+  $('.prev-page').on('click', function(){
+      searchNext(false);
+  });
 }
 
 function highlighter(keywords) {

@@ -10,4 +10,4 @@ def add_query(query, weight = 1):
         r.zincrby(u'comp:'+query[:i], query, weight)
 
 def do_query(prefix):
-    return u'[%s]' % u', '.join(u'"%s"'%unicode(t, 'utf-8') for t in r.zrevrange(u'comp:'+prefix, 0, 4))
+    return u'[%s]' % u', '.join(u'"%s"'%unicode(t, 'utf-8') for t in r.zrevrange(u'comp:'+prefix, 0, 5))

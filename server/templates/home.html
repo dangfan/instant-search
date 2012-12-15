@@ -55,17 +55,17 @@
       {{#each result}}
       <div class="row-fluid">
         <div class="span12 item">
-          <h4><a href="{{this.url}}">{{this.title}}</a></h4>
+          <h4><a href="{{this.url}}">{{{this.title}}}</a></h4>
           <p class="url">{{this.url}}</p>
-          <p>{{this.text}}</p>
+          <p>{{{this.text}}}</p>
         </div>
       </div>
       {{/each}}
       {{#if pager}}
       <ul class="pager">
-        <li class="next-page"><a href="javascript:void()"><i class="icon-chevron-left"></i> Previous</a> </li>
+        <li class="prev-page"><a href="javascript:void(0);"><i class="icon-chevron-left"></i> Previous</a> </li>
         <li> page {{page}} </li>
-        <li class="prev-page"> <a href="javascript:void()">Next <i class="icon-chevron-right"></i></a></li>
+        <li class="next-page"> <a href="javascript:void(0);">Next <i class="icon-chevron-right"></i></a></li>
       </ul>
       {{/if}}
     </script>
