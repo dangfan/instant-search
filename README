@@ -1,33 +1,22 @@
 Requirements
-* Beautiful Soup
-* Flask
-* redis
-* stemming
+
+* Python (above v2.7)
+* Related Python libraries
+    * Beautiful Soup
+    * Flask
+    * stemming
+* Redis
 
 Configuration
-$ brew install redis
-$ pip install beautifulsoup4 redis flask stemming
 
-Data Format:
-* Search Result:
-    {
-       "count" : 2293,
-       "result" :
-          [
-             {
-                "title" : "[必读]影响中石油股价变动重要信息汇总_股吧_东方财富网",
-                "url" : "http://guba2.eastmoney.com/601857,4263125,guba.html",
-                "text" : "... 同股同酬香港14元GB 作者： 58.39..."
-             },
-             ...
-          ]
-    }
+* Install Redis (refer to [Redis docs](http://redis.io/);
+* Install related python libs;
 
-* Suggest Result:
-    {
-        "result" :
-            [
-                "程序员",
-                "程序设计"
-            ]
-    }
+    `$ pip install beautifulsoup4 redis flask stemming`
+* Configure crawler, please refer to crawler/README
+* Build index
+
+	`$ python searching/make_index.py`
+* Run the server
+
+	`$ python run.py`
