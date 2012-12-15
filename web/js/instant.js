@@ -1,4 +1,6 @@
 var templateSearchResults, templateMain, inputTimer;
+var RESULT_PER_PAGE = 10
+  , currentPage = 1;
 
 $(document).ready(function(){
   $('form#search').submit(function(){
@@ -8,7 +10,6 @@ $(document).ready(function(){
       showResults(data);
       toggleWaiting(false);
     });
-    console.log("??");
     return false;
   });
 
@@ -45,33 +46,33 @@ function toggleWaiting(forceShow) {
 }
 
 function search(query, callback) {
-  $.ajax({
-    url: "",
-    type: "GET",
-    dataType: "json",
-    success: function(data) {
-      callback(data);
-    },
-    error: function(jqXHR, textStatus) {
-    }
-  });
+  // $.ajax({
+  //   url: "",
+  //   type: "GET",
+  //   dataType: "json",
+  //   success: function(data) {
+  //     callback(data);
+  //   },
+  //   error: function(jqXHR, textStatus) {
+  //   }
+  // });
 
-  // data = {
-  //      "count" : 2293,
-  //      "result" :
-  //         [
-  //            {
-  //               "title" : "[必读]影响中石油股价变动重要信息汇总_股吧_东方财富网",
-  //               "url" : "http://guba2.eastmoney.com/601857,4263125,guba.html",
-  //               "text" : "... 同股同酬香港14元GB 作者： 58.39..."
-  //            },             {
-  //               "title" : "1[必读]影响中石油股价变动重要信息汇总_股吧_东方财富网",
-  //               "url" : "http://guba2.eastmoney.com/601857,4263125,guba.html",
-  //               "text" : "... 同股同酬香港14元GB 作者： 58.39..."
-  //            }
-  //         ]
-  //   };
-  // callback(data);
+  data = {
+       "count" : 2293,
+       "result" :
+          [
+             {
+                "title" : "[必读]影响中石油股价变动重要信息汇总_股吧_东方财富网",
+                "url" : "http://guba2.eastmoney.com/601857,4263125,guba.html",
+                "text" : "... 同股同酬香港14元GB 作者： 58.39..."
+             },             {
+                "title" : "1[必读]影响中石油股价变动重要信息汇总_股吧_东方财富网",
+                "url" : "http://guba2.eastmoney.com/601857,4263125,guba.html",
+                "text" : "... 同股同酬香港14元GB 作者： 58.39..."
+             }
+          ]
+    };
+  callback(data);
 }
 
 function suggest(query, callback) {
@@ -107,6 +108,9 @@ function showResults(data) {
     var source = $('#template-search-results').html();
     templateSearchResults = Handlebars.compile(source);
   }
+
+  var count = parseInt(data.count) || 0;
+  data.pager = count < RESULT_PER_PAGE ? false : true;
 
   $('#results').html(templateSearchResults(data));
   $('.item').on({

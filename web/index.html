@@ -49,7 +49,7 @@
     <script type="text/x-handlebars-template" id="template-search-results">
       <div class="row-fluid">
         <div class="span12">
-          <p><i class="icon-inbox"></i> About {{count}} results <i class="icon-time"></i> consumed 0.22 seconds </p>
+          <p><i class="icon-inbox"></i> About {{count}} results <i class="icon-time"></i> consumed {{time}} seconds </p>
         </div>
       </div>
       {{#each result}}
@@ -61,6 +61,13 @@
         </div>
       </div>
       {{/each}}
+      {{#if pager}}
+      <ul class="pager">
+        <li class="next-page"><a href="javascript:void()"><i class="icon-chevron-left"></i> Previous</a> </li>
+        <li> page {{page}} </li>
+        <li class="prev-page"> <a href="javascript:void()">Next <i class="icon-chevron-right"></i></a></li>
+      </ul>
+      {{/if}}
     </script>
   </body>
 </html>
